@@ -1,0 +1,183 @@
+CREATE USER user
+IDENTIFIED BY pw
+	DEFAULT TABLESPACE tablespace
+	TEMPORARY TABLESPACE tablespace
+
+GRANT CONNECT, DBA, RESOURCE TO user;
+
+GRANT CREATE SESSION TO user
+GRANT CREATE DATABASE LINK TO user
+GRANT CREATE MATERIALIZED VIEW TO user
+GRANT CREATE PROCEDURE TO user
+GRANT CREATE PUBLIC SYNONYM TO user
+GRANT CREATE ROLE TO user
+GRANT CREATE SEQUENCE TO user
+GRANT CREATE SYNONYM TO user
+GRANT CREATE TABLE TO user
+GRANT DROP ANY TABLE TO user
+GRANT CREATE TRIGGER TO user
+GRANT CREATE TYPE TO user
+GRANT CREATE VIEW TO user
+
+CREATE TABLE table (
+	 column VARCHAR2(30) NOT NULL
+	,column TYPE
+	,CONSTRAINT pkName PRIMARY KEY (column)
+    ,CONSTRAINT fkName FOREIGN KEY (column) REFERENCES table2(column)
+)
+
+RENAME table TO table
+
+DROP TABLE table
+		DROP TABLE table CASCADE CONSTRAINT;
+
+
+ALTER TABLE [원본 테이블] RENAME TO [바꾸려는 테이블명];
+
+ALTER TABLE table ADD(column TYPE);
+
+ALTER TABLE table MODIFY(column TYPE);
+
+ALTER TABLE table DROP COLUMN column
+
+ALTER TABLE table RENAME COLUMN column TO column;
+
+
+
+INSERT INTO table VALUES(?,?,?)
+		INSERT INTO table (column, column) VALUES(?,?)
+
+SELECT ? FROM table WHERE column LIKE '%'||?||'%'
+
+UPDATE table SET column = ? WHERE column = ?
+
+DELETE FROM table WHERE column = ?
+
+{CALL procedure(?, ?)}
+
+
+SHOW INDEX FROM table
+
+CREATE UNIQUE INDEX index ON table (column, column)
+
+
+
+SQLPLUS sys/pw AS SYSDBA
+
+ALTER USER user IDENTIFIED BY password;
+
+ALTER USER user ACCOUNT UNLOCK;
+
+SQLPLUS id/pw
+		SQLPLUS id/pw@123.456.0.789:1521/orcl
+
+
+VARIABLE out VARCHAR2(100);
+
+EXEC procedure('data', out);
+
+PRINT out
+
+VARIABLE cur REFCURSOR;
+
+EXEC procedure(:cur);
+
+PRINT cur
+
+
+CREATE OR REPLACE PROCEDURE procedure
+	(in IN VARCHAR2, out OUT SYS_REFCURSOR)
+IS
+	variable;
+	cur REFCURSOR;
+BEGIN
+
+	OPEN cur FOR
+	SELECT column, column
+	FROM table;
+
+	LOOP
+        FETCH cur INTO v_column, v_column;
+        EXIT cur%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_column || '     ' || v_column);
+    END LOOP;
+    
+	SELECT column INTO variable
+	FROM table
+	WHERE column = in;
+	
+	IF condition THEN
+		statements;
+	ELSIF condition THEN
+		statements;
+	ELSE
+		statements;
+	END IF;
+	
+	CASE
+		WHEN condition THEN
+			statements;
+		ELSE
+			statements;
+	END;
+	
+	LOOP
+		statements;
+		EXIT WHEN condition;
+	END LOOP;
+	
+	WHILE condition LOOP
+		statements;
+	END LOOP;
+	
+	FOR i IN 1..9 LOOP
+	 / FOR i IN REVERSE 9..1 LOOP
+		statements;
+	END LOOP;
+	
+	out := variable;
+END;
+
+
+CREATE OR REPLACE FUNCTION function
+	(in IN NUMBER(50), in IN VARCHAR2(100) )
+RETURN VARCHAR2
+IS
+	variable;
+BEGIN
+	RETURN variable;
+END;
+
+
+CREATE OR REPLACE TRIGGER trigger
+BEFORE event ON table
+ / AFTER event ON table
+   	FOR EACH ROW
+		WHEN (condition)
+DECLARE
+	variable;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('before: ' || OLD.column || ', after: ' || NEW.column);
+END;
+
+
+CREATE OR REPLACE PROCEDURE cursor
+	(out OUT SYS_REFCURSOR)
+IS
+	CURSOR cur IS
+		SELECT column, COUNT(column)
+		FROM table
+		GROUP BY column;
+	var1 type;
+	var2 type;
+BEGIN
+	OPEN cur;
+	FETCH cur INTO var1, var2;
+	DBMS_OUTPUT.PUT_LINE('var1: ' || var1);
+	DBMS_OUTPUT.PUT_LINE('var2: ' || var2);
+	
+	OPEN out
+	FOR SELECT column
+		FROM table;
+	FETCH dept_avg INTO v_dname, emp_cnt, sal_avg;
+END;
