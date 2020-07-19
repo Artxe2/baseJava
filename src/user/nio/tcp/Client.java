@@ -20,9 +20,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class Client extends JFrame implements ActionListener {
-
-	private static final int SERVER_PORT = 4000;
-	private static final String sIP = "localhost";
+	private static final int SERVER_PORT = 8000;
+	private static final String SERVER_IP = "localhost";
 	protected static Selector selector = null;
 	protected static SocketChannel cscTCP = null;
 	private static final StringBuilder msg = new StringBuilder();
@@ -49,21 +48,10 @@ public class Client extends JFrame implements ActionListener {
 	private void clientStart() {
 		try {
 			selector = Selector.open();
-//			/*
-			long start = System.nanoTime();
-			for (int i = 1; i < 30001; i++) {
-				cscTCP = SocketChannel.open(new InetSocketAddress(sIP, SERVER_PORT));
-				cscTCP.configureBlocking(false);
-				cscTCP.register(selector, SelectionKey.OP_READ);
-				if (i % 100 == 0) System.out.println(i);
-			}
-			long end = System.nanoTime();//
-			System.out.println((end - start) / 1000000.0 + "ms - accept");
-//			 */
-			cscTCP = SocketChannel.open(new InetSocketAddress(sIP, SERVER_PORT));
+			cscTCP = SocketChannel.open(new InetSocketAddress(SERVER_IP, SERVER_PORT));
 			cscTCP.configureBlocking(false);
 			cscTCP.register(selector, SelectionKey.OP_READ);
-			System.out.println("NIO TCP Client Start, Port: " + SERVER_PORT);
+			System.out.println("Nio Tcp Client Start, Port: " + SERVER_PORT);
 			initDisplay();
 			addListener();
 			new Thread(new ClientTh(this)).start();
@@ -85,7 +73,7 @@ public class Client extends JFrame implements ActionListener {
 	}
 
 	private void initDisplay() {
-		setTitle("NIO TCP Client");
+		setTitle("Nio Tcp Client");
 		setSize(600, 400);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -115,13 +103,13 @@ public class Client extends JFrame implements ActionListener {
 			ByteBuffer bb = bbp.burrowBuffer();
 			int s = jcb.getSelectedIndex();
 			if (s == 0) {
-				msg.append(PVO.A);
+				msg.append(Pvo.A);
 			} else if (s == 1) {
-				msg.append(PVO.B);
+				msg.append(Pvo.B);
 			}
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.Sharp);
 			msg.append(userName);
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.Sharp);
 			msg.append(input);
 			bb.put(msg.toString().getBytes());
 			bb.flip();
@@ -147,8 +135,8 @@ public class Client extends JFrame implements ActionListener {
 		ByteBuffer bb = bbp.burrowBuffer();
 		userList.add(name);
 		refreshUserList();
-		msg.append(PVO.LOG_IN);
-		msg.append(PVO.Sharp);
+		msg.append(Pvo.LOG_IN);
+		msg.append(Pvo.Sharp);
 		msg.append(name);
 		bb.put(msg.toString().getBytes());
 		bb.flip();
@@ -164,7 +152,7 @@ public class Client extends JFrame implements ActionListener {
 
 	protected void doLogOut() {
 		ByteBuffer bb = bbp.burrowBuffer();
-		bb.put(PVO.LOG_OUT.getBytes());
+		bb.put(Pvo.LOG_OUT.getBytes());
 		bb.flip();
 		try {
 			cscTCP.write(bb);

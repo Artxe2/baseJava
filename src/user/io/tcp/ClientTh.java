@@ -51,14 +51,14 @@ public class ClientTh implements Runnable {
 	}
 
 	private void analysisResponse(String response) {
-		StringTokenizer st = new StringTokenizer(response, PVO.Sharp);
+		StringTokenizer st = new StringTokenizer(response, Pvo.Sharp);
 		if (st.hasMoreTokens()) {
 			String protocol = st.nextToken();
-			if (protocol.compareTo(PVO.MESSAGE) == 0) {
+			if (protocol.compareTo(Pvo.MESSAGE) == 0) {
 				message(st);
-			} else if (protocol.compareTo(PVO.LOG_IN) == 0) {
+			} else if (protocol.compareTo(Pvo.LOG_IN) == 0) {
 				logIn(st);
-			} else if (protocol.compareTo(PVO.LOG_OUT) == 0) {
+			} else if (protocol.compareTo(Pvo.LOG_OUT) == 0) {
 				logOut(st);
 			} else {
 				System.out.println("Undefined Protocol...\"" + protocol + "\"");

@@ -31,7 +31,7 @@ public class ClientTh implements Runnable {
 	@Override
 	public void run() {
 		try {
-			new Thread(new ClientHandleRun(this)).start();
+			new Thread(new ClientThWork(this)).start();
 			System.out.println("ClientTh Start");
 			while (isLoop) {
 				try {
@@ -86,7 +86,7 @@ public class ClientTh implements Runnable {
 	protected void analysisResponse(ByteBuffer response) {
 		StringTokenizer st = null;
 		try {
-			st = new StringTokenizer(decoder.decode(response).toString(), PVO.Sharp);
+			st = new StringTokenizer(decoder.decode(response).toString(), Pvo.Sharp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -94,11 +94,11 @@ public class ClientTh implements Runnable {
 		}
 		if (st.hasMoreTokens()) {
 			String protocol = st.nextToken();
-			if (protocol.compareTo(PVO.MESSAGE) == 0) {
+			if (protocol.compareTo(Pvo.MESSAGE) == 0) {
 				message(st);
-			} else if (protocol.compareTo(PVO.LOG_IN) == 0) {
+			} else if (protocol.compareTo(Pvo.LOG_IN) == 0) {
 				logIn(st);
-			} else if (protocol.compareTo(PVO.LOG_OUT) == 0) {
+			} else if (protocol.compareTo(Pvo.LOG_OUT) == 0) {
 				logOut(st);
 			} else {
 				System.out.println("Undefined Protocol...\"" + response + "\"");

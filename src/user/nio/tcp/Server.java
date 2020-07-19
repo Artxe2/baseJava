@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 public class Server {
 
 	private static final int R_R_AP = Runtime.getRuntime().availableProcessors();
-	private static final int SERVER_PORT = 4000;
+	private static final int SERVER_PORT = 8000;
 	private static final String sIP = "localhost";
 	private static Selector selector = null;
 	private static final CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
@@ -31,7 +31,6 @@ public class Server {
 	private static final List<String> nList = new ArrayList<>();// All <UserName>
 	private static final Map<SocketChannel, String> aMap = new HashMap<>();// All <User, UserName>
 	protected static final ByteBufferPool bbp = new ByteBufferPool(10000, 1024);
-	// protected static final Queue<String> requests = new LinkedList<>();
 	protected static final Queue<ByteBuffer> requests = new LinkedList<>();
 	protected static final Queue<SocketChannel> requesters = new LinkedList<>();
 	private static final ExecutorService es = Executors.newFixedThreadPool(R_R_AP);
@@ -47,7 +46,7 @@ public class Server {
 	private void serverStart() {
 		try {
 			for (int i = 0; i < R_R_AP; i++) {
-				es.submit(new ServerHandleRun(this));
+				es.submit(new ServerThWork(this));
 			}
 			selector = Selector.open();
 			ServerSocketChannel sscTCP = ServerSocketChannel.open();
@@ -78,14 +77,10 @@ public class Server {
 	}
 
 	private void accept(SelectionKey key) throws Exception {
-		// long start = System.nanoTime();//
 		ServerSocketChannel sscTCP = (ServerSocketChannel) key.channel();
 		SocketChannel hscTCP = sscTCP.accept();
 		hscTCP.configureBlocking(false);
 		hscTCP.register(selector, SelectionKey.OP_READ);
-		// long end = System.nanoTime();//
-		// System.out.println((end - start) / 1000000.0 + "ms - accept");//
-//		System.out.println("Connected by: " + hscTCP.socket().getInetAddress());
 	}
 
 	protected void read(SelectionKey key) {
@@ -98,8 +93,6 @@ public class Server {
 			bb.flip();
 			requesters.offer(hscTCP);
 			requests.offer(bb);
-			// long end = System.nanoTime();//
-			// System.out.println((end - start) / 1000000.0 + "ms - read");//
 		} catch (Exception e) {
 			key.cancel();
 			logOut(hscTCP);
@@ -117,7 +110,7 @@ public class Server {
 	protected void analysisRequest(SocketChannel hscTCP, ByteBuffer request) {
 		StringTokenizer st = null;
 		try {
-			st = new StringTokenizer(decoder.decode(request).toString(), PVO.Sharp);
+			st = new StringTokenizer(decoder.decode(request).toString(), Pvo.Sharp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -125,13 +118,13 @@ public class Server {
 		}
 		if (st.hasMoreTokens()) {
 			String protocol = st.nextToken();
-			if (protocol.compareTo(PVO.A) == 0) {
+			if (protocol.compareTo(Pvo.A) == 0) {
 				methodA(hscTCP, st);
-			} else if (protocol.compareTo(PVO.B) == 0) {
+			} else if (protocol.compareTo(Pvo.B) == 0) {
 				methodB(st);
-			} else if (protocol.compareTo(PVO.LOG_IN) == 0) {
+			} else if (protocol.compareTo(Pvo.LOG_IN) == 0) {
 				logIn(hscTCP, st);
-			} else if (protocol.compareTo(PVO.LOG_OUT) == 0) {
+			} else if (protocol.compareTo(Pvo.LOG_OUT) == 0) {
 				logOut(hscTCP);
 			} else {
 				System.out.println("Undefined Protocol...\"" + request + "\"");
@@ -142,7 +135,6 @@ public class Server {
 	}
 
 	private void broadCast(SocketChannel hscTCP, String msg) {
-		// ByteBuffer bb = ByteBuffer.allocateDirect(1024);
 		ByteBuffer bb = bbp.burrowBuffer();
 		bb.put(msg.getBytes());
 		bb.flip();
@@ -174,10 +166,10 @@ public class Server {
 	private void logIn(SocketChannel hscTCP, StringTokenizer st) {
 		String userName = st.nextToken();
 		for (String s : nList) {
-			msg.append(PVO.LOG_IN);
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.LOG_IN);
+			msg.append(Pvo.Sharp);
 			msg.append(s);
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.Sharp);
 			msg.append(" - Welcome");
 			broadCast(hscTCP, msg.toString());
 			msg.setLength(0);
@@ -189,34 +181,33 @@ public class Server {
 			}
 		}
 		nList.add(userName);
-		msg.append(PVO.LOG_IN);
-		msg.append(PVO.Sharp);
+		msg.append(Pvo.LOG_IN);
+		msg.append(Pvo.Sharp);
 		msg.append(userName);
-		msg.append(PVO.Sharp);
+		msg.append(Pvo.Sharp);
 		msg.append(" - Hi");
 		broadCast(aList, msg.toString());
 		msg.setLength(0);
 		aList.add(hscTCP);
 		aMap.put(hscTCP, userName);
-		System.out.println(selector.keys().size());
 	}
 
 	protected void logOut(SocketChannel hscTCP) {
 		aList.remove(hscTCP);
-		msg.append(PVO.LOG_OUT);
-		msg.append(PVO.Sharp);
+		msg.append(Pvo.LOG_OUT);
+		msg.append(Pvo.Sharp);
 		msg.append(aMap.get(hscTCP));
 		aMap.remove(hscTCP);
-		msg.append(PVO.Sharp);
+		msg.append(Pvo.Sharp);
 		msg.append(" - Bye");
 		broadCast(aList, msg.toString());
 		msg.setLength(0);
 	}
 
 	private void methodA(SocketChannel hscTCP, StringTokenizer st) {
-		msg.append(PVO.MESSAGE);
+		msg.append(Pvo.MESSAGE);
 		while (st.hasMoreTokens()) {
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.Sharp);
 			msg.append(st.nextElement());
 		}
 		broadCast(hscTCP, msg.toString());
@@ -224,9 +215,9 @@ public class Server {
 	}
 
 	private void methodB(StringTokenizer st) {
-		msg.append(PVO.MESSAGE);
+		msg.append(Pvo.MESSAGE);
 		while (st.hasMoreTokens()) {
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.Sharp);
 			msg.append(st.nextElement());
 		}
 		broadCast(aList, msg.toString());

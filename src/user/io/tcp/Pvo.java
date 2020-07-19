@@ -1,6 +1,6 @@
 package user.io.tcp;
 
-public class PVO {
+public class Pvo {
 	/* protocol value object */
 	protected static final String Sharp = "\r\n";// Separator
 	protected static final String LOG_IN = "a";

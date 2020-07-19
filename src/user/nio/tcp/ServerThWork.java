@@ -3,11 +3,11 @@ package user.nio.tcp;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-public class ServerHandleRun implements Runnable {
+public class ServerThWork implements Runnable {
 
 	private Server server = null;
 
-	ServerHandleRun(Server server) {
+	ServerThWork(Server server) {
 		this.server = server;
 	}
 
@@ -17,17 +17,17 @@ public class ServerHandleRun implements Runnable {
 		while (isLoop) {
 			SocketChannel hscTCP = null;
 			ByteBuffer bb = null;
-			synchronized (server) {
-				if (!server.requests.isEmpty()) {
+			if (!server.requests.isEmpty()) {
+				synchronized (server) {
 					hscTCP = server.requesters.poll();
 					bb = server.requests.poll();
-				} else {
-					try {
-						Thread.sleep(0, 1);
-					} catch (Exception e) {
-						e.printStackTrace();
-					} finally {
-					}
+				}
+			} else {
+				try {
+					Thread.sleep(0, 1);
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
 				}
 			}
 			if (bb != null) {

@@ -10,7 +10,7 @@ import java.util.List;
 public class Server {
 
 	private static final int SERVER_PORT = 4000;
-	private static String sIP = "localhost";
+	private static final String SERVER_IP = "localhost";
 	private static ServerSocket ssTCP = null;
 	protected static Socket hsTCP = null;
 	protected static List<ServerTh> aList = new ArrayList<>();// All <Users>
@@ -26,8 +26,8 @@ public class Server {
 	private void serverStart() {
 		try {
 			ssTCP = new ServerSocket();
-			ssTCP.bind(new InetSocketAddress(sIP, SERVER_PORT));
-			System.out.println("IO TCP Server Start, Port: " + SERVER_PORT);
+			ssTCP.bind(new InetSocketAddress(SERVER_IP, SERVER_PORT));
+			System.out.println("Io Tcp Server Start, Port: " + SERVER_PORT);
 			while (true) {
 				hsTCP = ssTCP.accept();// Blocking Point
 				new Thread(new ServerTh(this)).start();

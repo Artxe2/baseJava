@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 public class Client extends JFrame implements ActionListener {
 
 	private static final int SERVER_PORT = 4000;
-	private static String sIP = "localhost";
+	private static final String SERVER_IP = "localhost";
 	protected static Socket csTCP = new Socket();
 	protected static ObjectOutputStream cOOS = null;
 	private static StringBuilder msg = new StringBuilder();
@@ -46,18 +46,8 @@ public class Client extends JFrame implements ActionListener {
 
 	private void clientStart() {
 		try {
-//			/*
-			long start = System.nanoTime();
-			for (int i = 1; i < 30001; i++) {
-				csTCP = new Socket();
-				csTCP.connect(new InetSocketAddress(sIP, SERVER_PORT));// Time Out Point
-				if (i % 100 == 0) System.out.println(i);
-			}
-			long end = System.nanoTime();//
-			System.out.println((end - start) / 1000000.0 + "ms - accept");
-//			 */
-			csTCP.connect(new InetSocketAddress(sIP, SERVER_PORT));// Time Out Point
-			System.out.println("IO TCP Client Start, Port: " + SERVER_PORT);
+			csTCP.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));// Time Out Point
+			System.out.println("Io Tcp Client Start, Port: " + SERVER_PORT);
 			cOOS = new ObjectOutputStream(new BufferedOutputStream(csTCP.getOutputStream()));
 			initDisplay();
 			addListener();
@@ -109,13 +99,13 @@ public class Client extends JFrame implements ActionListener {
 		if (input.compareTo("") != 0) {
 			int s = jcb.getSelectedIndex();
 			if (s == 0) {
-				msg.append(PVO.A);
+				msg.append(Pvo.A);
 			} else if (s == 1) {
-				msg.append(PVO.B);
+				msg.append(Pvo.B);
 			}
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.Sharp);
 			msg.append(userName);
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.Sharp);
 			msg.append(input);
 			try {
 				cOOS.writeObject(msg.toString());
@@ -139,8 +129,8 @@ public class Client extends JFrame implements ActionListener {
 		userList.add(name);
 		refreshUserList();
 		try {
-			msg.append(PVO.LOG_IN);
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.LOG_IN);
+			msg.append(Pvo.Sharp);
 			msg.append(name);
 			cOOS.writeObject(msg.toString());
 			cOOS.flush();
@@ -153,7 +143,7 @@ public class Client extends JFrame implements ActionListener {
 
 	protected void doLogOut() {
 		try {
-			cOOS.writeObject(PVO.LOG_OUT);
+			cOOS.writeObject(Pvo.LOG_OUT);
 			cOOS.flush();
 		} catch (Exception e) {
 			e.printStackTrace();

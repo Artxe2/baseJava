@@ -1,16 +1,19 @@
 package user.nio.tcp;
 
-public class ClientHandleRun implements Runnable {
+import java.nio.ByteBuffer;
+
+public class ClientThWork implements Runnable {
 
 	private ClientTh clientTh = null;
 
-	ClientHandleRun(ClientTh clientTh) {
+	ClientThWork(ClientTh clientTh) {
 		this.clientTh = clientTh;
 	}
 
 	@Override
 	public void run() {
 		boolean isLoop = true;
+		ByteBuffer bb = null;
 		while (isLoop) {
 			if (!clientTh.responses.isEmpty()) {
 				try {

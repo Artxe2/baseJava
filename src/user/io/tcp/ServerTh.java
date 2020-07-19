@@ -57,16 +57,16 @@ public class ServerTh implements Runnable {
 	}
 
 	private boolean analysisRequest(String request) {
-		StringTokenizer st = new StringTokenizer(request, PVO.Sharp);
+		StringTokenizer st = new StringTokenizer(request, Pvo.Sharp);
 		if (st.hasMoreTokens()) {
 			String protocol = st.nextToken();
-			if (protocol.compareTo(PVO.A) == 0) {
+			if (protocol.compareTo(Pvo.A) == 0) {
 				methodA(st);
-			} else if (protocol.compareTo(PVO.B) == 0) {
+			} else if (protocol.compareTo(Pvo.B) == 0) {
 				methodB(st);
-			} else if (protocol.compareTo(PVO.LOG_IN) == 0) {
+			} else if (protocol.compareTo(Pvo.LOG_IN) == 0) {
 				logIn(st);
-			} else if (protocol.compareTo(PVO.LOG_OUT) == 0) {
+			} else if (protocol.compareTo(Pvo.LOG_OUT) == 0) {
 				return false;
 			} else {
 				System.out.println("Undefined Protocol...\"" + protocol + "\"");
@@ -101,18 +101,18 @@ public class ServerTh implements Runnable {
 		userName = st.nextToken();
 		for (ServerTh s : aList) {
 			StringBuilder msg = new StringBuilder();
-			msg.append(PVO.LOG_IN);
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.LOG_IN);
+			msg.append(Pvo.Sharp);
 			msg.append(s.userName);
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.Sharp);
 			msg.append(" - Welcome");
 			broadCast(msg.toString());
 		}
 		StringBuilder msg = new StringBuilder();
-		msg.append(PVO.LOG_IN);
-		msg.append(PVO.Sharp);
+		msg.append(Pvo.LOG_IN);
+		msg.append(Pvo.Sharp);
 		msg.append(userName);
-		msg.append(PVO.Sharp);
+		msg.append(Pvo.Sharp);
 		msg.append(" - Hi");
 		broadCast(aList, msg.toString());
 		aList.add(this);
@@ -121,19 +121,19 @@ public class ServerTh implements Runnable {
 	private void logOut() {
 		aList.remove(this);
 		StringBuilder msg = new StringBuilder();
-		msg.append(PVO.LOG_OUT);
-		msg.append(PVO.Sharp);
+		msg.append(Pvo.LOG_OUT);
+		msg.append(Pvo.Sharp);
 		msg.append(userName);
-		msg.append(PVO.Sharp);
+		msg.append(Pvo.Sharp);
 		msg.append(" - Bye");
 		broadCast(aList, msg.toString());
 	}
 
 	private void methodA(StringTokenizer st) {
 		StringBuilder msg = new StringBuilder();
-		msg.append(PVO.MESSAGE);
+		msg.append(Pvo.MESSAGE);
 		while (st.hasMoreTokens()) {
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.Sharp);
 			msg.append(st.nextElement());
 		}
 		broadCast(msg.toString());
@@ -141,9 +141,9 @@ public class ServerTh implements Runnable {
 
 	private void methodB(StringTokenizer st) {
 		StringBuilder msg = new StringBuilder();
-		msg.append(PVO.MESSAGE);
+		msg.append(Pvo.MESSAGE);
 		while (st.hasMoreTokens()) {
-			msg.append(PVO.Sharp);
+			msg.append(Pvo.Sharp);
 			msg.append(st.nextElement());
 		}
 		broadCast(aList, msg.toString());
