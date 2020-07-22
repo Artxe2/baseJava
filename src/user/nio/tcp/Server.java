@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 public class Server {
 
 	private static final int R_R_AP = Runtime.getRuntime().availableProcessors();
-	private static final int SERVER_PORT = 8000;
+	private static final int SERVER_PORT = 4000;
 	private static final String sIP = "localhost";
 	private static Selector selector = null;
 	private static final CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();

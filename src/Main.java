@@ -1,3 +1,7 @@
+interface If {
+	int asd(int a);
+}
+
 public class Main {
 
 	Main() {
@@ -5,6 +9,9 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		new Main();
+		If i = (a) -> { return a * 4; };
+		int r = i.asd(4);
+		System.out.println(r);
+		new Thread(() ->  {System.out.println("run");}).start();
 	}
 }

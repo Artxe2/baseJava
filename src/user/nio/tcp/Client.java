@@ -20,7 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class Client extends JFrame implements ActionListener {
-	private static final int SERVER_PORT = 8000;
+	private static final int SERVER_PORT = 4000;
 	private static final String SERVER_IP = "localhost";
 	protected static Selector selector = null;
 	protected static SocketChannel cscTCP = null;
