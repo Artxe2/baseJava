@@ -26,9 +26,9 @@ public class Object_File_Stream implements Serializable {
 	private static String s;
 
 	Object_File_Stream() throws Exception {
-		oosFromFile();
+		oosToFile();
 		oisFromFile();
-		oosFromString();
+		oosToString();
 		oisFromString();
 	}
 
@@ -36,7 +36,7 @@ public class Object_File_Stream implements Serializable {
 		new Object_File_Stream();
 	}
 
-	public void oosFromFile() throws Exception {
+	public void oosToFile() throws Exception {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
 		Data o = new Data();
 		oos.writeObject(o);
@@ -50,7 +50,7 @@ public class Object_File_Stream implements Serializable {
 		ois.close();
 	}
 
-	public void oosFromString() throws Exception {
+	public void oosToString() throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(baos));
 		Data o = new Data();

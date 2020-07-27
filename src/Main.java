@@ -1,13 +1,9 @@
 public class Main {
 
-	public Main() {
-		int num = 9;
-		for (int i = 1; i <= 9; i++) {
-			System.out.println(num + " x " + i + " = " + (i * num));
-		}
+	public Main() throws Exception {
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		new Main();
 	}
 }

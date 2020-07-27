@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -158,23 +157,28 @@ public class BcNode extends JFrame implements Serializable, ActionListener {
 	}
 
 	private void setPath() {
-		StringTokenizer st = new StringTokenizer(getClass().getClassLoader().getResource("blockchain/save").toString(),
-				"/");
-		st.nextToken();
-		StringBuilder sb = new StringBuilder();
-		while (st.hasMoreTokens()) {
-			sb.append(st.nextToken() + "\\");
-		}
-		root_path = sb.toString();
-		if (root_path.contains("target\\classes")) {
-			String[] sa = root_path.split("target\\\\classes");
-			System.out.println(sa[0]);
-			root_path = sa[0] + "src\\main\\java" + sa[1];
-		}
+		File f;
+		root_path = new File("blockchain/save").getAbsolutePath() + "\\";
 		block_path = root_path + "block\\";
+		f = new File(block_path);
+		if (!f.exists()) {
+			f.mkdirs();
+		}
 		wallet_path = root_path + "wallet\\";
+		f = new File(wallet_path);
+		if (!f.exists()) {
+			f.mkdirs();
+		}
 		publickey_path = root_path + "public_key\\";
+		f = new File(publickey_path);
+		if (!f.exists()) {
+			f.mkdirs();
+		}
 		transaction_path = root_path + "transaction\\";
+		f = new File(transaction_path);
+		if (!f.exists()) {
+			f.mkdirs();
+		}
 		tx_list_path = root_path + "TxList.tx_list";
 		god_path = root_path + "God.god";
 		logger.info("BLOCK_PATH: " + block_path);
@@ -355,7 +359,6 @@ public class BcNode extends JFrame implements Serializable, ActionListener {
 	 */
 
 	private void initDisplay() {
-		System.out.println(getClass().getClassLoader().toString());
 		keyName.put(god.publicKey, "[GM] god");
 		jbtn_bc.addActionListener(this);
 		jbtn_ms.addActionListener(this);
@@ -365,8 +368,8 @@ public class BcNode extends JFrame implements Serializable, ActionListener {
 		jbtn_wc.addActionListener(this);
 		jbtn_se.addActionListener(this);
 		jbtn_tx.addActionListener(this);
-		setIconImage(new ImageIcon("src//main//java//blockchain//icon.png").getImage());
-		setTitle("Chain Node ver 0.4 - OFF");
+		setIconImage(new ImageIcon(root_path + "icon.png").getImage());
+		setTitle("Chain Node ver 0.7 - OFF");
 		setSize(1200, 800);
 		setLocationRelativeTo(null);
 		add("North", jp_north);
@@ -478,19 +481,16 @@ public class BcNode extends JFrame implements Serializable, ActionListener {
 					try {
 						while (isAutoMining) {
 							jta.append("자동 채굴중...\n");
-							boolean isSuccess = createBlock();
-							//							if (isAutoMining) {
-							//								isAutoMining = isSuccess;
-							//							}
+							createBlock();
 						}
 						if (!isAutoMining) {
 							jta.append("자동 채굴 종료\n");
-							setTitle("Chain Node ver 0.4 - OFF");
+							setTitle("Chain Node ver 0.7 - OFF");
 						}
 					} catch (Exception e) {
 						isAutoMining = false;
 						jta.append("자동 채굴 종료\n");
-						setTitle("Chain Node ver 0.4 - OFF");
+						setTitle("Chain Node ver 0.7 - OFF");
 						e.printStackTrace();
 					}
 				}
@@ -498,7 +498,7 @@ public class BcNode extends JFrame implements Serializable, ActionListener {
 		} else {
 			isMiningable = false;
 			jta.append("자동 채굴 종료\n");
-			setTitle("Chain Node ver 0.4 - OFF");
+			setTitle("Chain Node ver 0.7 - OFF");
 		}
 	}
 
