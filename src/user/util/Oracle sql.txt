@@ -32,7 +32,7 @@ DROP TABLE table
 		DROP TABLE table CASCADE CONSTRAINT;
 
 
-ALTER TABLE [원본 테이블] RENAME TO [바꾸려는 테이블명];
+ALTER TABLE before_table RENAME TO after_table;
 
 ALTER TABLE table ADD(column TYPE);
 
