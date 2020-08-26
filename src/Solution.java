@@ -1,41 +1,18 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import com.google.gson.Gson;
 
 class Solution {
-	Solution(){
-		int[] r = solution(new int[] {1,2,3,2,3});
-		for (int i : r) {
-			System.out.println(i);
-		}
+	public int solution(int[] m) {
+		int f = m.length;
+		int[][] d = { new int[f], new int[f], new int[f] };
+		d[0][0] = m[0];
+		d[1][1] = m[0];
+		d[2][2] = m[0];
+		return 0;
 	}
-    public int[] solution(int[] p) {
-    	Queue<Integer> q = new LinkedList<>();
-    	for (int i : p) {
-    		q.offer(i);
-    	}
-        int[] r = new int[p.length];
-        boolean[] b = new boolean[p.length];
-        while(true) {
-        	int x = q.poll();
-        	if (q.isEmpty()) {
-        		break;
-        	} else {
-        		q.offer(1);
-        	}
-        }
-        for (int i = 0; i < p.length; i++) {
-        	for (int j = 0; j < i; j++) {
-        		if (!b[j]) {
-        			r[j]++;
-        			if (p[j] > p[i]) {
-        				b[j] = true;
-        			}
-        		}
-        	}
-        }
-        return r;
-    }
-    public static void main(String[] args) {
-		new Solution();
+
+	public static void main(String[] args) {
+		Solution s = new Solution();
+		int r = s.solution(new Gson().fromJson("[1, 2, 3, 1]", int[].class));
+		System.out.println("\n" + new Gson().toJson(r));
 	}
 }

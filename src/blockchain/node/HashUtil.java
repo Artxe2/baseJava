@@ -113,11 +113,6 @@ public final class HashUtil implements Serializable {
 		return merkleRoot.compareTo(getMerkleRoot(txs, null)) == 0;
 	}
 
-	// 머클 패쓰 검증
-	public static boolean verifyMerklePath() {
-		return true;
-	}
-
 	// 기준 시간과 블록을 생성하는데 걸린 시간의 갭을 비교하여 이전 난이도를 기준으로 0.5 ~ 1.5배까지 난이도를 조정
 	public static long getDifficulty(long previousDifficulty, long guideTime, long previousTime, long currentTime) {
 		double difficulty = (double) (currentTime - previousTime) / guideTime;
@@ -138,7 +133,7 @@ public final class HashUtil implements Serializable {
 		int index = target.length() - 1;
 		int maxDifficulty = Integer.parseInt(new String(new char[target.length()]).replace('\0', 'F'), 16);
 		target = new String(new char[index]).replace('\0', '0')
-				+ Integer.toHexString((int) Math.round((maxDifficulty - difficulty) / (maxDifficulty) / 16.0));
+				+ Integer.toHexString((int) Math.round(16.0 / maxDifficulty * difficulty) - 1);
 		return target.substring(0, index).equals(hash.substring(0, index))
 				&& target.charAt(index) >= hash.charAt(index);
 	}

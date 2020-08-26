@@ -42,7 +42,10 @@ public class FpsSensi {
 		int cpi = 1300;
 		int fov = 103;
 		double dpd = 600000 / 11 / 10.6 / 360.0;
+		double odpd = 600000 / 11 / 360.0;
 		double sensi = dpd * ratio / (1 / Math.asin(Math.sin(fov / Math.PI / 360) / mon_x * Math.PI * 180) / 2);
+		double osensi = odpd * ratio / (1 / Math.asin(Math.sin(fov / Math.PI / 360) / mon_x * Math.PI * 180) / 2);
+		System.out.printf("osensi: %2.3f", osensi);
 		System.out.printf("\nedpi: %5.1f\n", sensi * cpi * ratio);
 		System.out.printf("sensi: %2.3f\n\n", sensi);
 		System.out.printf("x1.15: %2.3f\n", 1 / 1.15);
