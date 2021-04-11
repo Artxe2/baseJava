@@ -1,57 +1,47 @@
 class Solution {
-    int answer, dLength, wLength, verify, start;
-
-    int solution(int n, int[] weak, int[] dist) {
-        dLength = dist.length;
-        wLength = weak.length;
-        if (wLength == 1) {
-            return 1;
+    public String solution(String[] participant, String[] completion) {
+        int length = completion.length;
+        quickSort(participant, 0, length);
+        quickSort(completion, 0, length - 1);
+        int i = 0;
+        for (; i < length; i++) {
+            if (!participant[i].equals(completion[i])) {
+                return participant[i];
+            }
         }
-        answer = dLength + 1;
-        verify = dLength;
-        weak = java.util.Arrays.copyOf(weak, wLength * 2);
-        for (; start < wLength; start++) {
-            weak[start + wLength] = weak[start] + n;
-        }
-        permutation(weak, dist, new boolean[dLength], new int[dLength], 0);
-        return answer > dLength ? -1 : answer;
+        return participant[i];
     }
 
-    void verifyCheck(int[] weak, int[] dist) {
-        int index = 0, check = 0, end;
-        while (index < verify) {
-            end = weak[start + check] + dist[index++];
-            while (weak[start + check] <= end) {
-                check++;
-                if (check == wLength) {
-                    if (answer > index) {
-                        answer = index;
-                        verify = answer - 1;
-                    }
-                    return;
+    void quickSort(String[] array, int start, int end) {
+        if (start < end) {
+            String pivot = array[start];
+            int left = start, right = end + 1;
+            if (start - end > 1) {
+                int mid = (start + end) / 2;
+                pivot = array[mid];
+                array[mid] = array[start];
+            }
+            while (left < right) {
+                while (left < right && verifyOrder(pivot, array[--right]));
+                if (left < right) {
+                    array[left] = array[right];
+                }
+                while (left < right && verifyOrder(array[++left], pivot));
+                if (left < right) {
+                    array[right] = array[left];
                 }
             }
+            array[right] = pivot;
+            quickSort(array, start, left - 1);
+            quickSort(array, left + 1, end);
         }
     }
 
-    void permutation(int[] weak, int[] dist, boolean[] used, int[] array, int index) {
-        if (index < verify) {
-            int next = index + 1;
-            for (int i = 0; i < dLength; i++) {
-                if (!used[i]) {
-                    array[index] = dist[i];
-                    used[i] = true;
-                    permutation(weak, dist, used, array, next);
-                    used[i] = false;
-                    if (index >= verify) {
-                        return;
-                    }
-                }
-            }
-        } else {
-            for (start = 0; start < wLength; start++) {
-                verifyCheck(weak, array);
-            }
-        }
+    void redixSort() {
+
+    }
+
+    boolean verifyOrder(String a, String b) {
+        return a.compareTo(b) <= 0;
     }
 }

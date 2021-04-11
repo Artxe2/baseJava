@@ -1,6 +1,15 @@
 package user.util;
 
 public class Quicksort {
+    int[][] bucket = new int['z'][];
+    int[] sequence = { 1, 4, 10, 23, 57, 132, 301, 701 };
+
+    {
+        for (int i = 'a'; i <= 'z'; i++) {
+            bucket[i] = new int[1000];
+        }
+    }
+
     public Quicksort() {
         int length = 100000;
         long start;
@@ -8,18 +17,16 @@ public class Quicksort {
         for (int i = 0; i < length; i++) {
             array[i] = (int) (Math.random() * 1000);
         }
-        printArray(array);
-        start = System.nanoTime();
-        sort(array, 0, array.length - 1);
-        System.out.println((System.nanoTime() - start) / 1000000.0 + "ms");
-        printArray(array);
+        quickSort(array, 0, array.length - 1);
+
         for (int i = 0; i < length; i++) {
             array[i] = (int) (Math.random() * 1000);
         }
         printArray(array);
         start = System.nanoTime();
-        java.util.Arrays.sort(array);
-        System.out.println((System.nanoTime() - start) / 1000000.0 + "ms");
+        quickSort(array, 0, array.length - 1);
+        double time = (System.nanoTime() - start) / 1000000.0;
+        System.out.println(time + "ms");
         printArray(array);
     }
 
@@ -45,10 +52,11 @@ public class Quicksort {
     /*
      * custom sort
      */
-    void sort(int[] array, int start, int end) {
-        if (start < end) {
+    void quickSort(int[] array, int start, int end) {
+        if (end - start > 1000) {
             int pivot = array[start];
-            int left = start, right = end + 1;
+            int left = start;
+            int right = end + 1;
             if (start - end > 1) {
                 int mid = (start + end) / 2;
                 pivot = array[mid];
@@ -65,16 +73,24 @@ public class Quicksort {
                 }
             }
             array[right] = pivot;
-            sort(array, start, left - 1);
-            sort(array, left + 1, end);
+            quickSort(array, start, left - 1);
+            quickSort(array, left + 1, end);
+        } else {
+            int index =
+                    redixSort(array, start, end, index);
         }
     }
 
+    void redixSort(int[] array, int start, int end, int index) {
+
+    }
+
+    void shellSort() {
+
+    }
+
     boolean verifyOrder(int a, int b) {
-        if (a > b) {
-            return false;
-        }
-        return true;
+        return a <= b;
     }
 
     public static void main(String[] args) {
